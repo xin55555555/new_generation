@@ -85,7 +85,7 @@ def submit_pcap_job(payload: dict[str, Any]) -> dict[str, Any]:
         "statusJsonPath": str(_job_path(job_id).resolve()),
     }
     _save(job)
-    log("【步骤 3/5】收到控制中心 PCAP 通知", fmt_json(job))
+    log("【步骤 3/6】收到控制中心 PCAP 通知", fmt_json(job))
     _EXECUTOR.submit(_run_job, job_id, pcap_path, dict(payload))
     return job
 
@@ -94,12 +94,19 @@ def _run_job(job_id: str, pcap_path: Path, payload: dict[str, Any]) -> None:
     job = get_job(job_id) or {"jobId": job_id}
     job.update({"status": "running", "startedAt": _now()})
     _save(job)
-    log("【步骤 4/5】识别攻击并选择增量策略", [f"jobId: {job_id}", f"PCAP: {pcap_path}"])
+    log("【步骤 4/6】开始识别攻击", [f"jobId: {job_id}", f"PCAP: {pcap_path}"])
 
     try:
         result = generate(pcap_path, payload)
         identified_attacks = _load_identified_attacks(result.get("jobsPath"))
+        
+        log(
+            "【步骤 4/6 完成】攻击识别完成",
+            fmt_json({"jobId": job_id, "identifiedAttacks": identified_attacks}),
+        )
+        
         result["identifiedAttacks"] = identified_attacks
+
         job.update(
             {
                 "pipelineStatus": result.get("status"),
@@ -110,19 +117,16 @@ def _run_job(job_id: str, pcap_path: Path, payload: dict[str, Any]) -> None:
                 "unsupportedJobCount": result.get("unsupportedJobCount", 0),
             }
         )
-        log(
-            "【步骤 4/5 完成】攻击识别完成",
-            fmt_json({"jobId": job_id, "identifiedAttacks": identified_attacks}),
-        )
 
         try:
             selected_payloads = load_selected_payloads(result)
             payload_log = [item["payload"] for item in selected_payloads]
             log(
-                "【步骤 5/5】向控制中心回传增量策略",
+                "【步骤 5/6】生成调优策略并回传控制中心",
                 fmt_json(payload_log[0] if len(payload_log) == 1 else payload_log),
             )
             dispatch = dispatch_selected_templates(result, selected_payloads)
+
             job["controlCenterDispatch"] = dispatch
             result["controlCenterDispatch"] = dispatch
             result_path = Path(result["resultJsonPath"])
@@ -134,7 +138,7 @@ def _run_job(job_id: str, pcap_path: Path, payload: dict[str, Any]) -> None:
 
         job.update({"status": "success", "finishedAt": _now()})
         log(
-            "【步骤 5/5 完成】控制中心已接收增量策略",
+            "【步骤 6/6 完成】控制中心成功执行防御策略",
             fmt_json(job.get("controlCenterDispatch", {})),
         )
     except Exception as exc:

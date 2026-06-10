@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from src.api.index import router
 from src.configs.index import API_HOST, API_PORT, CONTROL_CENTER_URL
-from src.services.demo_logger import log
+from src.services.demo_logger import init, log
 
 
 app = FastAPI(title="DDoS Policy Generation System", version="1.0.0")
@@ -18,11 +18,5 @@ async def http_exception_handler(_request: Request, exc: HTTPException) -> JSONR
 
 @app.on_event("startup")
 def startup() -> None:
-    log(
-        "策略调优服务启动",
-        [
-            f"监听地址: {API_HOST}:{API_PORT}",
-            f"控制中心: {CONTROL_CENTER_URL}",
-        ],
-    )
+    init()
 
