@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from src.configs.index import CALLBACK_REQUIRED, JOB_WORKERS, WORKDIR
-from src.services.control_center import dispatch_selected_templates
+from src.services.control_center import dispatch_selected_templates, load_selected_payloads
 from src.services.demo_logger import fmt_json, log
 from src.services.policy_generation import generate, resolve_pcap
 
@@ -116,7 +116,13 @@ def _run_job(job_id: str, pcap_path: Path, payload: dict[str, Any]) -> None:
         )
 
         try:
-            dispatch = dispatch_selected_templates(result)
+            selected_payloads = load_selected_payloads(result)
+            payload_log = [item["payload"] for item in selected_payloads]
+            log(
+                "【步骤 5/5】向控制中心回传增量策略",
+                fmt_json(payload_log[0] if len(payload_log) == 1 else payload_log),
+            )
+            dispatch = dispatch_selected_templates(result, selected_payloads)
             job["controlCenterDispatch"] = dispatch
             result["controlCenterDispatch"] = dispatch
             result_path = Path(result["resultJsonPath"])
@@ -127,7 +133,10 @@ def _run_job(job_id: str, pcap_path: Path, payload: dict[str, Any]) -> None:
                 raise
 
         job.update({"status": "success", "finishedAt": _now()})
-        log("【步骤 5/5 完成】增量策略已生成并回传控制中心", fmt_json(job))
+        log(
+            "【步骤 5/5 完成】控制中心已接收增量策略",
+            fmt_json(job.get("controlCenterDispatch", {})),
+        )
     except Exception as exc:
         job.update(
             {
