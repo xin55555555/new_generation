@@ -1,0 +1,360 @@
+{
+  "baseline": "config/policy_t.json",
+  "template_dir": "华为antiddos1908/模板/switch_templates_incremental",
+  "backup_dir": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z",
+  "template_count": 21,
+  "total_before_policy_count": 165,
+  "total_after_policy_count": 79,
+  "templates": [
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/ack_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/ack_flood.switch_template.incremental.json",
+      "normalized_attack_type": "ACK_FLOOD",
+      "before_policy_count": 3,
+      "after_policy_count": 3,
+      "before_devices": {
+        "10.99.80.104": 3
+      },
+      "after_devices": {
+        "10.99.80.104": 3
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 0,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/amplification_request.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/amplification_request.switch_template.incremental.json",
+      "normalized_attack_type": "AMPLIFICATION_REQUEST",
+      "before_policy_count": 0,
+      "after_policy_count": 0,
+      "before_devices": {},
+      "after_devices": {},
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 0,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/dns_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/dns_app.switch_template.incremental.json",
+      "normalized_attack_type": "DNS_APP",
+      "before_policy_count": 10,
+      "after_policy_count": 5,
+      "before_devices": {
+        "10.99.80.104": 5,
+        "10.99.80.105": 5
+      },
+      "after_devices": {
+        "10.99.80.104": 5
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/dns_reply_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/dns_reply_flood.switch_template.incremental.json",
+      "normalized_attack_type": "DNS_REPLY_FLOOD",
+      "before_policy_count": 10,
+      "after_policy_count": 5,
+      "before_devices": {
+        "10.99.80.104": 5,
+        "10.99.80.105": 5
+      },
+      "after_devices": {
+        "10.99.80.104": 5
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/dns_request_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/dns_request_flood.switch_template.incremental.json",
+      "normalized_attack_type": "DNS_REQUEST_FLOOD",
+      "before_policy_count": 10,
+      "after_policy_count": 5,
+      "before_devices": {
+        "10.99.80.104": 5,
+        "10.99.80.105": 5
+      },
+      "after_devices": {
+        "10.99.80.104": 5
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/dtls_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/dtls_app.switch_template.incremental.json",
+      "normalized_attack_type": "DTLS_APP",
+      "before_policy_count": 2,
+      "after_policy_count": 1,
+      "before_devices": {
+        "10.99.80.104": 1,
+        "10.99.80.105": 1
+      },
+      "after_devices": {
+        "10.99.80.104": 1
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/gre_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/gre_flood.switch_template.incremental.json",
+      "normalized_attack_type": "GRE_FLOOD",
+      "before_policy_count": 6,
+      "after_policy_count": 3,
+      "before_devices": {
+        "10.99.80.104": 3,
+        "10.99.80.105": 3
+      },
+      "after_devices": {
+        "10.99.80.104": 3
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/http_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/http_app.switch_template.incremental.json",
+      "normalized_attack_type": "HTTP_APP",
+      "before_policy_count": 10,
+      "after_policy_count": 5,
+      "before_devices": {
+        "10.99.80.104": 5,
+        "10.99.80.105": 5
+      },
+      "after_devices": {
+        "10.99.80.104": 5
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/https_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/https_app.switch_template.incremental.json",
+      "normalized_attack_type": "HTTPS_APP",
+      "before_policy_count": 8,
+      "after_policy_count": 4,
+      "before_devices": {
+        "10.99.80.104": 4,
+        "10.99.80.105": 4
+      },
+      "after_devices": {
+        "10.99.80.104": 4
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/icmp_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/icmp_flood.switch_template.incremental.json",
+      "normalized_attack_type": "ICMP_FLOOD",
+      "before_policy_count": 8,
+      "after_policy_count": 3,
+      "before_devices": {
+        "10.99.80.104": 4,
+        "10.99.80.105": 4
+      },
+      "after_devices": {
+        "10.99.80.104": 3
+      },
+      "removed_equal_to_baseline": 1,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/ip_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/ip_flood.switch_template.incremental.json",
+      "normalized_attack_type": "IP_FLOOD",
+      "before_policy_count": 6,
+      "after_policy_count": 3,
+      "before_devices": {
+        "10.99.80.104": 3,
+        "10.99.80.105": 3
+      },
+      "after_devices": {
+        "10.99.80.104": 3
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/quic_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/quic_app.switch_template.incremental.json",
+      "normalized_attack_type": "QUIC_APP",
+      "before_policy_count": 6,
+      "after_policy_count": 3,
+      "before_devices": {
+        "10.99.80.104": 3,
+        "10.99.80.105": 3
+      },
+      "after_devices": {
+        "10.99.80.104": 3
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/sip_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/sip_app.switch_template.incremental.json",
+      "normalized_attack_type": "SIP_APP",
+      "before_policy_count": 6,
+      "after_policy_count": 3,
+      "before_devices": {
+        "10.99.80.104": 3,
+        "10.99.80.105": 3
+      },
+      "after_devices": {
+        "10.99.80.104": 3
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/syn_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/syn_flood.switch_template.incremental.json",
+      "normalized_attack_type": "SYN_FLOOD",
+      "before_policy_count": 16,
+      "after_policy_count": 5,
+      "before_devices": {
+        "10.99.80.104": 8,
+        "10.99.80.105": 8
+      },
+      "after_devices": {
+        "10.99.80.104": 5
+      },
+      "removed_equal_to_baseline": 3,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/tcp_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/tcp_flood.switch_template.incremental.json",
+      "normalized_attack_type": "TCP_FLOOD",
+      "before_policy_count": 10,
+      "after_policy_count": 5,
+      "before_devices": {
+        "10.99.80.104": 5,
+        "10.99.80.105": 5
+      },
+      "after_devices": {
+        "10.99.80.104": 5
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/tcp_state_exhaustion.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/tcp_state_exhaustion.switch_template.incremental.json",
+      "normalized_attack_type": "TCP_STATE_EXHAUSTION",
+      "before_policy_count": 18,
+      "after_policy_count": 9,
+      "before_devices": {
+        "10.99.80.104": 9,
+        "10.99.80.105": 9
+      },
+      "after_devices": {
+        "10.99.80.104": 9
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/tcp_synack_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/tcp_synack_flood.switch_template.incremental.json",
+      "normalized_attack_type": "TCP_SYNACK_FLOOD",
+      "before_policy_count": 12,
+      "after_policy_count": 6,
+      "before_devices": {
+        "10.99.80.104": 6,
+        "10.99.80.105": 6
+      },
+      "after_devices": {
+        "10.99.80.104": 6
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/udp_amplification.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/udp_amplification.switch_template.incremental.json",
+      "normalized_attack_type": "UDP_AMPLIFICATION",
+      "before_policy_count": 8,
+      "after_policy_count": 3,
+      "before_devices": {
+        "10.99.80.104": 4,
+        "10.99.80.105": 4
+      },
+      "after_devices": {
+        "10.99.80.104": 3
+      },
+      "removed_equal_to_baseline": 1,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/udp_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/udp_flood.switch_template.incremental.json",
+      "normalized_attack_type": "UDP_FLOOD",
+      "before_policy_count": 2,
+      "after_policy_count": 2,
+      "before_devices": {
+        "10.99.80.104": 2
+      },
+      "after_devices": {
+        "10.99.80.104": 2
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 0,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/udp_reflection.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/udp_reflection.switch_template.incremental.json",
+      "normalized_attack_type": "UDP_REFLECTION",
+      "before_policy_count": 8,
+      "after_policy_count": 3,
+      "before_devices": {
+        "10.99.80.104": 4,
+        "10.99.80.105": 4
+      },
+      "after_devices": {
+        "10.99.80.104": 3
+      },
+      "removed_equal_to_baseline": 1,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/unknown_ddos.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_policy_t_rebase_20260605T072734Z/unknown_ddos.switch_template.incremental.json",
+      "normalized_attack_type": "UNKNOWN_DDOS",
+      "before_policy_count": 6,
+      "after_policy_count": 3,
+      "before_devices": {
+        "10.99.80.104": 3,
+        "10.99.80.105": 3
+      },
+      "after_devices": {
+        "10.99.80.104": 3
+      },
+      "removed_equal_to_baseline": 0,
+      "dropped_unknown_device_entries": 1,
+      "missing_baseline_policies": 0
+    }
+  ]
+}

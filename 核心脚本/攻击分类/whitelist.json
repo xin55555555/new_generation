@@ -1,0 +1,13 @@
+{
+  "whitelist_domains": [
+    "www.yundun.com"
+  ],
+  "whitelist_src_ip": [],
+  "whitelist_dst_ip": [],
+  "whitelist_urls": [],
+  "dns_whitelist_domains": [],
+  "dns_whitelist_src_ip": [
+    "8.8.8.8"
+  ],
+  "dns_whitelist_dst_ip": []
+}

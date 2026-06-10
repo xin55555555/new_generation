@@ -1,0 +1,1631 @@
+{
+  "baseline": "config/policy_t.json",
+  "strict_profile_source": {
+    "xlsx": "config/ATIC策略配置基线20260602.xlsx",
+    "sheet": "ATIC策略配置-R25.0",
+    "column": "严格-Strict"
+  },
+  "template_dir": "华为antiddos1908/模板/switch_templates_incremental",
+  "backup_dir": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z",
+  "template_count": 21,
+  "total_before_policy_count": 76,
+  "total_after_policy_count": 74,
+  "unrepresented_notes": [
+    {
+      "topic": "SYN source challenge mode",
+      "source_rows": [
+        13
+      ],
+      "strict_value": "智能模式",
+      "reason": "Current JSON schema only exposes mode_type; keep baseline mode_type unless an explicit device enum is confirmed."
+    },
+    {
+      "topic": "UDP fingerprint/watermark details",
+      "source_rows": [
+        110,
+        111,
+        113,
+        114,
+        118
+      ],
+      "strict_value": "指纹学习/一致性学习开启，水印关闭",
+      "reason": "Current JSON has Udp_Correlation but no direct one-to-one fields for all fingerprint-learning parameters."
+    },
+    {
+      "topic": "DNS reply flood",
+      "source_rows": [
+        277
+      ],
+      "strict_value": "关闭",
+      "reason": "Strict profile intentionally produces an empty DNS_REPLY_FLOOD template unless a deployment-specific override is required."
+    },
+    {
+      "topic": "SIP flood",
+      "source_rows": [
+        295,
+        300
+      ],
+      "strict_value": "关闭",
+      "reason": "Strict profile intentionally produces an empty SIP_APP template."
+    }
+  ],
+  "templates": [
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/ack_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/ack_flood.switch_template.incremental.json",
+      "normalized_attack_type": "ACK_FLOOD",
+      "before_policy_count": 7,
+      "after_policy_count": 7,
+      "before_devices": {
+        "10.99.80.104": 7
+      },
+      "after_devices": {
+        "10.99.80.104": 7
+      },
+      "rules_requested": 7,
+      "rules_applied": 7,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Tcp_Ack_Flood_Attack",
+          "source_rows": [
+            30,
+            32
+          ],
+          "strict_values": {
+            "30": "开启",
+            "32": 20000
+          },
+          "enable_status": 1,
+          "threshold": "500000",
+          "strict_profile_threshold_ignored": "20000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Ack_Flood_Attack_Bandwidth",
+          "source_rows": [
+            33
+          ],
+          "strict_values": {
+            "33": 80000
+          },
+          "enable_status": 1,
+          "threshold": "2000000",
+          "strict_profile_threshold_ignored": "80000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Ack_First_Packet_Check",
+          "source_rows": [
+            35,
+            36
+          ],
+          "strict_values": {
+            "35": "开启",
+            "36": "0-6"
+          },
+          "enable_status": 1,
+          "threshold": "0-6",
+          "strict_profile_threshold_ignored": "0-6",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Ack_Session_Detection_Mode",
+          "source_rows": [
+            37,
+            38
+          ],
+          "strict_values": {
+            "37": null,
+            "38": "严格"
+          },
+          "enable_status": 1,
+          "threshold": null,
+          "strict_profile_threshold_ignored": null,
+          "mode_type": 0
+        },
+        {
+          "attack_type": "Tcp_Ack_Src_Low_Speed_Behavior_Analysis",
+          "source_rows": [
+            42,
+            48
+          ],
+          "strict_values": {
+            "42": null,
+            "48": "3"
+          },
+          "enable_status": 1,
+          "threshold": "10",
+          "strict_profile_threshold_ignored": "3",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Ack_Session_Behavior_Analysis",
+          "source_rows": [
+            49,
+            50
+          ],
+          "strict_values": {
+            "49": "开启",
+            "50": "300"
+          },
+          "enable_status": 1,
+          "threshold": "5000",
+          "strict_profile_threshold_ignored": "300",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Abn_Ack_Conn_Detect",
+          "source_rows": [
+            51,
+            52,
+            53,
+            54
+          ],
+          "strict_values": {
+            "51": "开启",
+            "52": 1000,
+            "53": 90,
+            "54": 15
+          },
+          "enable_status": 1,
+          "threshold": "1000,90,20",
+          "strict_profile_threshold_ignored": "1000,90,15",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/amplification_request.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/amplification_request.switch_template.incremental.json",
+      "normalized_attack_type": "AMPLIFICATION_REQUEST",
+      "before_policy_count": 0,
+      "after_policy_count": 0,
+      "before_devices": {},
+      "after_devices": {},
+      "rules_requested": 0,
+      "rules_applied": 0,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": []
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/dns_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/dns_app.switch_template.incremental.json",
+      "normalized_attack_type": "DNS_APP",
+      "before_policy_count": 4,
+      "after_policy_count": 4,
+      "before_devices": {
+        "10.99.80.104": 4
+      },
+      "after_devices": {
+        "10.99.80.104": 4
+      },
+      "rules_requested": 4,
+      "rules_applied": 4,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Dns_Abnormal",
+          "source_rows": [
+            263,
+            265
+          ],
+          "strict_values": {
+            "263": "开启",
+            "265": "500"
+          },
+          "enable_status": 1,
+          "threshold": "2000",
+          "strict_profile_threshold_ignored": "500",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Dns_Query_Flood",
+          "source_rows": [
+            266,
+            268,
+            269,
+            270
+          ],
+          "strict_values": {
+            "266": "开启",
+            "268": "开启",
+            "269": "关闭",
+            "270": "2,000"
+          },
+          "enable_status": 1,
+          "threshold": "5000",
+          "strict_profile_threshold_ignored": "2000",
+          "mode_type": 2
+        },
+        {
+          "attack_type": "Dns_Query_First_Packet_Check",
+          "source_rows": [
+            272,
+            273
+          ],
+          "strict_values": {
+            "272": "开启",
+            "273": "1/5"
+          },
+          "enable_status": 1,
+          "threshold": "1-5",
+          "strict_profile_threshold_ignored": "1-5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Dns_Src_Query_Limiting",
+          "source_rows": [
+            286,
+            287
+          ],
+          "strict_values": {
+            "286": "开启",
+            "287": "100"
+          },
+          "enable_status": 1,
+          "threshold": "100",
+          "strict_profile_threshold_ignored": "100",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/dns_reply_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/dns_reply_flood.switch_template.incremental.json",
+      "normalized_attack_type": "DNS_REPLY_FLOOD",
+      "before_policy_count": 0,
+      "after_policy_count": 0,
+      "before_devices": {},
+      "after_devices": {},
+      "rules_requested": 0,
+      "rules_applied": 0,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": []
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/dns_request_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/dns_request_flood.switch_template.incremental.json",
+      "normalized_attack_type": "DNS_REQUEST_FLOOD",
+      "before_policy_count": 4,
+      "after_policy_count": 4,
+      "before_devices": {
+        "10.99.80.104": 4
+      },
+      "after_devices": {
+        "10.99.80.104": 4
+      },
+      "rules_requested": 4,
+      "rules_applied": 4,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Dns_Abnormal",
+          "source_rows": [
+            263,
+            265
+          ],
+          "strict_values": {
+            "263": "开启",
+            "265": "500"
+          },
+          "enable_status": 1,
+          "threshold": "2000",
+          "strict_profile_threshold_ignored": "500",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Dns_Query_Flood",
+          "source_rows": [
+            266,
+            268,
+            269,
+            270
+          ],
+          "strict_values": {
+            "266": "开启",
+            "268": "开启",
+            "269": "关闭",
+            "270": "2,000"
+          },
+          "enable_status": 1,
+          "threshold": "5000",
+          "strict_profile_threshold_ignored": "2000",
+          "mode_type": 2
+        },
+        {
+          "attack_type": "Dns_Query_First_Packet_Check",
+          "source_rows": [
+            272,
+            273
+          ],
+          "strict_values": {
+            "272": "开启",
+            "273": "1/5"
+          },
+          "enable_status": 1,
+          "threshold": "1-5",
+          "strict_profile_threshold_ignored": "1-5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Dns_Src_Query_Limiting",
+          "source_rows": [
+            286,
+            287
+          ],
+          "strict_values": {
+            "286": "开启",
+            "287": "100"
+          },
+          "enable_status": 1,
+          "threshold": "100",
+          "strict_profile_threshold_ignored": "100",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/dtls_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/dtls_app.switch_template.incremental.json",
+      "normalized_attack_type": "DTLS_APP",
+      "before_policy_count": 2,
+      "after_policy_count": 2,
+      "before_devices": {
+        "10.99.80.104": 2
+      },
+      "after_devices": {
+        "10.99.80.104": 2
+      },
+      "rules_requested": 2,
+      "rules_applied": 2,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Udp_Traffic_Limiting",
+          "source_rows": [
+            123,
+            124
+          ],
+          "strict_values": {
+            "123": "开启",
+            "124": 50000
+          },
+          "enable_status": 1,
+          "threshold": "2000000",
+          "strict_profile_threshold_ignored": "50000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_New_Conn_Limiting",
+          "source_rows": [
+            128,
+            130
+          ],
+          "strict_values": {
+            "128": "开启",
+            "130": 100000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "100000",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/gre_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/gre_flood.switch_template.incremental.json",
+      "normalized_attack_type": "GRE_FLOOD",
+      "before_policy_count": 2,
+      "after_policy_count": 2,
+      "before_devices": {
+        "10.99.80.104": 2
+      },
+      "after_devices": {
+        "10.99.80.104": 2
+      },
+      "rules_requested": 2,
+      "rules_applied": 2,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Other_Traffic_Limiting",
+          "source_rows": [
+            304,
+            306,
+            308
+          ],
+          "strict_values": {
+            "304": "开启",
+            "306": "开启",
+            "308": 5000
+          },
+          "enable_status": 1,
+          "threshold": "500000",
+          "strict_profile_threshold_ignored": "5000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Other_New_Conn_Limiting",
+          "source_rows": [
+            310,
+            312
+          ],
+          "strict_values": {
+            "310": "开启",
+            "312": 10000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/http_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/http_app.switch_template.incremental.json",
+      "normalized_attack_type": "HTTP_APP",
+      "before_policy_count": 8,
+      "after_policy_count": 8,
+      "before_devices": {
+        "10.99.80.104": 8
+      },
+      "after_devices": {
+        "10.99.80.104": 8
+      },
+      "rules_requested": 8,
+      "rules_applied": 8,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Http_Abn_Src_Block",
+          "source_rows": [
+            162,
+            164,
+            165,
+            166
+          ],
+          "strict_values": {
+            "162": "开启/",
+            "164": "60",
+            "165": "10",
+            "166": "5"
+          },
+          "enable_status": 1,
+          "threshold": "10,5",
+          "strict_profile_threshold_ignored": "60,10,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Http_Single_Uri_Detect",
+          "source_rows": [
+            162,
+            164,
+            165,
+            166
+          ],
+          "strict_values": {
+            "162": "开启/",
+            "164": "60",
+            "165": "10",
+            "166": "5"
+          },
+          "enable_status": 1,
+          "threshold": "90,50,5",
+          "strict_profile_threshold_ignored": "60,10,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Http_Large_Resource_Detect",
+          "source_rows": [
+            179,
+            180,
+            182,
+            183,
+            184
+          ],
+          "strict_values": {
+            "179": "开启",
+            "180": "100",
+            "182": "60",
+            "183": "10",
+            "184": "5"
+          },
+          "enable_status": 1,
+          "threshold": "5000,90,200,3",
+          "strict_profile_threshold_ignored": "100,60,10,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Http_Slowloris_Detect",
+          "source_rows": [
+            201,
+            202,
+            204
+          ],
+          "strict_values": {
+            "201": "开启",
+            "202": "1000/50",
+            "204": "10"
+          },
+          "enable_status": 1,
+          "threshold": "10000,50,10",
+          "strict_profile_threshold_ignored": "1000,50,10",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Http_Abn_Conn_Defense",
+          "source_rows": [
+            196,
+            198
+          ],
+          "strict_values": {
+            "196": "开启",
+            "198": "10,000"
+          },
+          "enable_status": 1,
+          "threshold": "50000",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Http_Null_Conn_Detect",
+          "source_rows": [
+            206,
+            207
+          ],
+          "strict_values": {
+            "206": "开启",
+            "207": "1/5"
+          },
+          "enable_status": 1,
+          "threshold": "30,5",
+          "strict_profile_threshold_ignored": "1,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Http_Range_Amp_Detect",
+          "source_rows": [
+            208,
+            209
+          ],
+          "strict_values": {
+            "208": "开启",
+            "209": "2/5"
+          },
+          "enable_status": 1,
+          "threshold": "200,5",
+          "strict_profile_threshold_ignored": "2,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Http_Multi_Method_Conn_Detect",
+          "source_rows": [
+            210,
+            211
+          ],
+          "strict_values": {
+            "210": "开启",
+            "211": "2/5"
+          },
+          "enable_status": 1,
+          "threshold": "30,5",
+          "strict_profile_threshold_ignored": "2,5",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/https_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/https_app.switch_template.incremental.json",
+      "normalized_attack_type": "HTTPS_APP",
+      "before_policy_count": 10,
+      "after_policy_count": 10,
+      "before_devices": {
+        "10.99.80.104": 10
+      },
+      "after_devices": {
+        "10.99.80.104": 10
+      },
+      "rules_requested": 10,
+      "rules_applied": 10,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Tls_Attack_Dst_Ip",
+          "source_rows": [
+            215,
+            217
+          ],
+          "strict_values": {
+            "215": "开启",
+            "217": "20,000"
+          },
+          "enable_status": 1,
+          "threshold": "200000",
+          "strict_profile_threshold_ignored": "20000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tls_Src_Challenge_Auth",
+          "source_rows": [
+            220
+          ],
+          "strict_values": {
+            "220": "开启"
+          },
+          "enable_status": 1,
+          "threshold": null,
+          "strict_profile_threshold_ignored": null,
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tls_Unfixed_Resource_Detect",
+          "source_rows": [
+            221,
+            222,
+            223
+          ],
+          "strict_values": {
+            "221": "开启",
+            "222": "200/1",
+            "223": "1"
+          },
+          "enable_status": 1,
+          "threshold": "2000,1,3",
+          "strict_profile_threshold_ignored": "200,1,1",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tls_FingerPrint_Detect",
+          "source_rows": [
+            224,
+            226,
+            227,
+            229
+          ],
+          "strict_values": {
+            "224": "开启",
+            "226": "60%",
+            "227": "2000",
+            "229": "3/5"
+          },
+          "enable_status": 1,
+          "threshold": "5,60,5000,3",
+          "strict_profile_threshold_ignored": "5,60,2000,3",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tls_Large_Resource_Detect",
+          "source_rows": [
+            236,
+            238,
+            240,
+            241,
+            242
+          ],
+          "strict_values": {
+            "236": "开启",
+            "238": "100",
+            "240": "60",
+            "241": "10",
+            "242": "5"
+          },
+          "enable_status": 1,
+          "threshold": "5000,90,200,3",
+          "strict_profile_threshold_ignored": "100,60,10,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tls_Fixed_Resource_Detect",
+          "source_rows": [
+            243,
+            244,
+            245,
+            246
+          ],
+          "strict_values": {
+            "243": "开启",
+            "244": "60",
+            "245": "10",
+            "246": "5"
+          },
+          "enable_status": 1,
+          "threshold": "90,200,5",
+          "strict_profile_threshold_ignored": "60,10,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tls_Session_Attack_Defense",
+          "source_rows": [
+            249,
+            251
+          ],
+          "strict_values": {
+            "249": "开启",
+            "251": "10,000"
+          },
+          "enable_status": 1,
+          "threshold": "100000,10,5",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tls_Null_Conn_Detect",
+          "source_rows": [
+            254,
+            255
+          ],
+          "strict_values": {
+            "254": "开启",
+            "255": "1/5"
+          },
+          "enable_status": 1,
+          "threshold": "30,5",
+          "strict_profile_threshold_ignored": "1,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tls_Incomplete_Conn_Detect",
+          "source_rows": [
+            256,
+            257
+          ],
+          "strict_values": {
+            "256": "开启",
+            "257": "2/5"
+          },
+          "enable_status": 1,
+          "threshold": "10,5",
+          "strict_profile_threshold_ignored": "2,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tls_Rst_Conn_Detect",
+          "source_rows": [
+            260,
+            261
+          ],
+          "strict_values": {
+            "260": "开启",
+            "261": "2/5"
+          },
+          "enable_status": 1,
+          "threshold": "100,1",
+          "strict_profile_threshold_ignored": "2,5",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/icmp_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/icmp_flood.switch_template.incremental.json",
+      "normalized_attack_type": "ICMP_FLOOD",
+      "before_policy_count": 1,
+      "after_policy_count": 1,
+      "before_devices": {
+        "10.99.80.104": 1
+      },
+      "after_devices": {
+        "10.99.80.104": 1
+      },
+      "rules_requested": 1,
+      "rules_applied": 1,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Icmp_Traffic_Limiting",
+          "source_rows": [
+            291,
+            292
+          ],
+          "strict_values": {
+            "291": "开启",
+            "292": "500"
+          },
+          "enable_status": 1,
+          "threshold": "2000",
+          "strict_profile_threshold_ignored": "500",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/ip_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/ip_flood.switch_template.incremental.json",
+      "normalized_attack_type": "IP_FLOOD",
+      "before_policy_count": 2,
+      "after_policy_count": 2,
+      "before_devices": {
+        "10.99.80.104": 2
+      },
+      "after_devices": {
+        "10.99.80.104": 2
+      },
+      "rules_requested": 2,
+      "rules_applied": 2,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Other_Traffic_Limiting",
+          "source_rows": [
+            304,
+            306,
+            308
+          ],
+          "strict_values": {
+            "304": "开启",
+            "306": "开启",
+            "308": 5000
+          },
+          "enable_status": 1,
+          "threshold": "500000",
+          "strict_profile_threshold_ignored": "5000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Other_New_Conn_Limiting",
+          "source_rows": [
+            310,
+            312
+          ],
+          "strict_values": {
+            "310": "开启",
+            "312": 10000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/quic_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/quic_app.switch_template.incremental.json",
+      "normalized_attack_type": "QUIC_APP",
+      "before_policy_count": 2,
+      "after_policy_count": 2,
+      "before_devices": {
+        "10.99.80.104": 2
+      },
+      "after_devices": {
+        "10.99.80.104": 2
+      },
+      "rules_requested": 2,
+      "rules_applied": 2,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Udp_Traffic_Limiting",
+          "source_rows": [
+            123,
+            124
+          ],
+          "strict_values": {
+            "123": "开启",
+            "124": 50000
+          },
+          "enable_status": 1,
+          "threshold": "2000000",
+          "strict_profile_threshold_ignored": "50000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_New_Conn_Limiting",
+          "source_rows": [
+            128,
+            130
+          ],
+          "strict_values": {
+            "128": "开启",
+            "130": 100000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "100000",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/sip_app.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/sip_app.switch_template.incremental.json",
+      "normalized_attack_type": "SIP_APP",
+      "before_policy_count": 0,
+      "after_policy_count": 0,
+      "before_devices": {},
+      "after_devices": {},
+      "rules_requested": 0,
+      "rules_applied": 0,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": []
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/syn_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/syn_flood.switch_template.incremental.json",
+      "normalized_attack_type": "SYN_FLOOD",
+      "before_policy_count": 6,
+      "after_policy_count": 4,
+      "before_devices": {
+        "10.99.80.104": 6
+      },
+      "after_devices": {
+        "10.99.80.104": 4
+      },
+      "rules_requested": 7,
+      "rules_applied": 7,
+      "removed_equal_to_baseline": 3,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Tcp_Syn_Flood",
+          "source_rows": [
+            5,
+            7
+          ],
+          "strict_values": {
+            "5": "开启",
+            "7": 2000
+          },
+          "enable_status": 1,
+          "threshold": "100",
+          "strict_profile_threshold_ignored": "2000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Syn_Flood_Bandwidth",
+          "source_rows": [
+            8
+          ],
+          "strict_values": {
+            "8": 10000
+          },
+          "enable_status": 1,
+          "threshold": "100",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Syn_First_Packet_Check",
+          "source_rows": [
+            10,
+            11
+          ],
+          "strict_values": {
+            "10": "开启",
+            "11": "0.5-4"
+          },
+          "enable_status": 1,
+          "threshold": "0.5-4",
+          "strict_profile_threshold_ignored": "0.5-4",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Syn_Flood_Src_Challenge_Auth",
+          "source_rows": [
+            12,
+            13
+          ],
+          "strict_values": {
+            "12": "开启",
+            "13": "智能模式"
+          },
+          "enable_status": 1,
+          "threshold": null,
+          "strict_profile_threshold_ignored": null,
+          "mode_type": 0
+        },
+        {
+          "attack_type": "Syn_Advanced_Detection",
+          "source_rows": [
+            15
+          ],
+          "strict_values": {
+            "15": "开启"
+          },
+          "enable_status": 1,
+          "threshold": null,
+          "strict_profile_threshold_ignored": null,
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Syn_Abn_Src_Limit",
+          "source_rows": [
+            17
+          ],
+          "strict_values": {
+            "17": "10/1"
+          },
+          "enable_status": 1,
+          "threshold": "50,3",
+          "strict_profile_threshold_ignored": "10,1",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Syn_Flood_Abnormal_Src_Block",
+          "source_rows": [
+            18,
+            19,
+            20,
+            21
+          ],
+          "strict_values": {
+            "18": "开启",
+            "19": "80",
+            "20": "10/1",
+            "21": "2/3"
+          },
+          "enable_status": 1,
+          "threshold": "90,20,3,3,5",
+          "strict_profile_threshold_ignored": "80,10,1,2,3",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/tcp_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/tcp_flood.switch_template.incremental.json",
+      "normalized_attack_type": "TCP_FLOOD",
+      "before_policy_count": 4,
+      "after_policy_count": 4,
+      "before_devices": {
+        "10.99.80.104": 4
+      },
+      "after_devices": {
+        "10.99.80.104": 4
+      },
+      "rules_requested": 4,
+      "rules_applied": 4,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Tcp_Abnormal",
+          "source_rows": [
+            3,
+            4
+          ],
+          "strict_values": {
+            "3": "开启",
+            "4": 500
+          },
+          "enable_status": 1,
+          "threshold": "2000",
+          "strict_profile_threshold_ignored": "500",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Fin_Flood",
+          "source_rows": [
+            63,
+            65
+          ],
+          "strict_values": {
+            "63": "开启",
+            "65": 2000
+          },
+          "enable_status": 1,
+          "threshold": "50000",
+          "strict_profile_threshold_ignored": "2000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Fragment_Traffic_Limiting",
+          "source_rows": [
+            60,
+            93
+          ],
+          "strict_values": {
+            "60": "关闭",
+            "93": 10000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_New_Conn_Limiting",
+          "source_rows": [
+            95,
+            96
+          ],
+          "strict_values": {
+            "95": 400000,
+            "96": 100000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "100000",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/tcp_state_exhaustion.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/tcp_state_exhaustion.switch_template.incremental.json",
+      "normalized_attack_type": "TCP_STATE_EXHAUSTION",
+      "before_policy_count": 5,
+      "after_policy_count": 5,
+      "before_devices": {
+        "10.99.80.104": 5
+      },
+      "after_devices": {
+        "10.99.80.104": 5
+      },
+      "rules_requested": 5,
+      "rules_applied": 5,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Tcp_Concurrent_Connection_Check_By_Destination_Ip",
+          "source_rows": [
+            66,
+            68
+          ],
+          "strict_values": {
+            "66": "开启",
+            "68": 20000
+          },
+          "enable_status": 1,
+          "threshold": "500000",
+          "strict_profile_threshold_ignored": "20000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_New_Connection_Rate_Check_By_Destination_Ip",
+          "source_rows": [
+            69
+          ],
+          "strict_values": {
+            "69": 5000
+          },
+          "enable_status": 1,
+          "threshold": "10000",
+          "strict_profile_threshold_ignored": "5000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Connection_Number_Check_For_Source_Ip",
+          "source_rows": [
+            71,
+            72
+          ],
+          "strict_values": {
+            "71": "开启",
+            "72": "100"
+          },
+          "enable_status": 1,
+          "threshold": "2000",
+          "strict_profile_threshold_ignored": "100",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Src_Null_Conn_Detect",
+          "source_rows": [
+            76,
+            77
+          ],
+          "strict_values": {
+            "76": "开启",
+            "77": "5/5"
+          },
+          "enable_status": 1,
+          "threshold": "1,5,50,5",
+          "strict_profile_threshold_ignored": "5,5",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_Src_Abn_Conn_Drop",
+          "source_rows": [
+            83
+          ],
+          "strict_values": {
+            "83": "2/5"
+          },
+          "enable_status": 1,
+          "threshold": "50,5",
+          "strict_profile_threshold_ignored": "2,5",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/tcp_synack_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/tcp_synack_flood.switch_template.incremental.json",
+      "normalized_attack_type": "TCP_SYNACK_FLOOD",
+      "before_policy_count": 2,
+      "after_policy_count": 2,
+      "before_devices": {
+        "10.99.80.104": 2
+      },
+      "after_devices": {
+        "10.99.80.104": 2
+      },
+      "rules_requested": 2,
+      "rules_applied": 2,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Tcp_SynAck_Flood",
+          "source_rows": [
+            22,
+            24
+          ],
+          "strict_values": {
+            "22": "开启",
+            "24": 2000
+          },
+          "enable_status": 1,
+          "threshold": "50000",
+          "strict_profile_threshold_ignored": "2000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Tcp_SynAck_First_Packet_Check",
+          "source_rows": [
+            26,
+            27
+          ],
+          "strict_values": {
+            "26": "开启",
+            "27": "1-4"
+          },
+          "enable_status": 1,
+          "threshold": "0.5-4",
+          "strict_profile_threshold_ignored": "1-4",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/udp_amplification.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/udp_amplification.switch_template.incremental.json",
+      "normalized_attack_type": "UDP_AMPLIFICATION",
+      "before_policy_count": 4,
+      "after_policy_count": 4,
+      "before_devices": {
+        "10.99.80.104": 4
+      },
+      "after_devices": {
+        "10.99.80.104": 4
+      },
+      "rules_requested": 4,
+      "rules_applied": 4,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Udp_Traffic_Limiting",
+          "source_rows": [
+            123,
+            124
+          ],
+          "strict_values": {
+            "123": "开启",
+            "124": 50000
+          },
+          "enable_status": 1,
+          "threshold": "2000000",
+          "strict_profile_threshold_ignored": "50000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_Fragment_Rate_Limiting",
+          "source_rows": [
+            127
+          ],
+          "strict_values": {
+            "127": 10000
+          },
+          "enable_status": 1,
+          "threshold": "50000",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_New_Conn_Limiting",
+          "source_rows": [
+            128,
+            130
+          ],
+          "strict_values": {
+            "128": "开启",
+            "130": 100000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "100000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Statistics_Based_On_Destination_Ip",
+          "source_rows": [
+            321,
+            323,
+            325
+          ],
+          "strict_values": {
+            "321": "开启",
+            "323": "20%",
+            "325": "1000"
+          },
+          "enable_status": 1,
+          "threshold": "50000",
+          "strict_profile_threshold_ignored": "1000",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/udp_flood.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/udp_flood.switch_template.incremental.json",
+      "normalized_attack_type": "UDP_FLOOD",
+      "before_policy_count": 7,
+      "after_policy_count": 7,
+      "before_devices": {
+        "10.99.80.104": 7
+      },
+      "after_devices": {
+        "10.99.80.104": 7
+      },
+      "rules_requested": 7,
+      "rules_applied": 7,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Udp_Abnormal",
+          "source_rows": [
+            101,
+            103
+          ],
+          "strict_values": {
+            "101": "开启",
+            "103": "500"
+          },
+          "enable_status": 1,
+          "threshold": "2000",
+          "strict_profile_threshold_ignored": "500",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_Traffic_Limiting",
+          "source_rows": [
+            123,
+            124
+          ],
+          "strict_values": {
+            "123": "开启",
+            "124": 50000
+          },
+          "enable_status": 1,
+          "threshold": "2000000",
+          "strict_profile_threshold_ignored": "50000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_Traffic_Limiting_Strict",
+          "source_rows": [
+            125
+          ],
+          "strict_values": {
+            "125": "严格"
+          },
+          "enable_status": 1,
+          "threshold": null,
+          "strict_profile_threshold_ignored": null,
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_Fragment_Rate_Limiting",
+          "source_rows": [
+            127
+          ],
+          "strict_values": {
+            "127": 10000
+          },
+          "enable_status": 1,
+          "threshold": "50000",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_New_Conn_Limiting",
+          "source_rows": [
+            128,
+            130
+          ],
+          "strict_values": {
+            "128": "开启",
+            "130": 100000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "100000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_Session_Behavior_Detect_Packet_Interval",
+          "source_rows": [
+            108,
+            109
+          ],
+          "strict_values": {
+            "108": "开启",
+            "109": "0.1-2"
+          },
+          "enable_status": 1,
+          "threshold": "0-2",
+          "strict_profile_threshold_ignored": "0.1-2",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_Correlation",
+          "source_rows": [
+            110,
+            111,
+            114
+          ],
+          "strict_values": {
+            "110": "开启",
+            "111": "开启",
+            "114": "开启"
+          },
+          "enable_status": 1,
+          "threshold": "null|null|null|null,null|null|null|null",
+          "strict_profile_threshold_ignored": null,
+          "mode_type": 0
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/udp_reflection.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/udp_reflection.switch_template.incremental.json",
+      "normalized_attack_type": "UDP_REFLECTION",
+      "before_policy_count": 4,
+      "after_policy_count": 4,
+      "before_devices": {
+        "10.99.80.104": 4
+      },
+      "after_devices": {
+        "10.99.80.104": 4
+      },
+      "rules_requested": 4,
+      "rules_applied": 4,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Udp_Traffic_Limiting",
+          "source_rows": [
+            123,
+            124
+          ],
+          "strict_values": {
+            "123": "开启",
+            "124": 50000
+          },
+          "enable_status": 1,
+          "threshold": "2000000",
+          "strict_profile_threshold_ignored": "50000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_Fragment_Rate_Limiting",
+          "source_rows": [
+            127
+          ],
+          "strict_values": {
+            "127": 10000
+          },
+          "enable_status": 1,
+          "threshold": "50000",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Udp_New_Conn_Limiting",
+          "source_rows": [
+            128,
+            130
+          ],
+          "strict_values": {
+            "128": "开启",
+            "130": 100000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "100000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Statistics_Based_On_Destination_Ip",
+          "source_rows": [
+            321,
+            323,
+            325
+          ],
+          "strict_values": {
+            "321": "开启",
+            "323": "20%",
+            "325": "1000"
+          },
+          "enable_status": 1,
+          "threshold": "50000",
+          "strict_profile_threshold_ignored": "1000",
+          "mode_type": null
+        }
+      ]
+    },
+    {
+      "template": "华为antiddos1908/模板/switch_templates_incremental/unknown_ddos.switch_template.incremental.json",
+      "backup": "华为antiddos1908/模板/switch_templates_incremental/backup_before_atic_strict_20260605T080647Z/unknown_ddos.switch_template.incremental.json",
+      "normalized_attack_type": "UNKNOWN_DDOS",
+      "before_policy_count": 2,
+      "after_policy_count": 2,
+      "before_devices": {
+        "10.99.80.104": 2
+      },
+      "after_devices": {
+        "10.99.80.104": 2
+      },
+      "rules_requested": 2,
+      "rules_applied": 2,
+      "removed_equal_to_baseline": 0,
+      "missing_baseline_policies": [],
+      "applied_rules": [
+        {
+          "attack_type": "Other_Traffic_Limiting",
+          "source_rows": [
+            304,
+            306,
+            308
+          ],
+          "strict_values": {
+            "304": "开启",
+            "306": "开启",
+            "308": 5000
+          },
+          "enable_status": 1,
+          "threshold": "500000",
+          "strict_profile_threshold_ignored": "5000",
+          "mode_type": null
+        },
+        {
+          "attack_type": "Other_New_Conn_Limiting",
+          "source_rows": [
+            310,
+            312
+          ],
+          "strict_values": {
+            "310": "开启",
+            "312": 10000
+          },
+          "enable_status": 1,
+          "threshold": "100000",
+          "strict_profile_threshold_ignored": "10000",
+          "mode_type": null
+        }
+      ]
+    }
+  ]
+}

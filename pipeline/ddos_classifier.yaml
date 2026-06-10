@@ -1,0 +1,238 @@
+# DDoS 分类器配置文件
+# 版本：v5.5  （2026-05-26）
+# 修改后重启程序生效，无需修改代码
+#
+# v5.5 变更说明：
+#   新增分类器（无新 YAML 配置项，复用 min_pkts.default）：
+#   - classify_tcp_flood() 新增 DupACK-Flood 子类型：
+#     纯 ACK 包中重复 ack_n（出现≥3次）比例>80% → DupACK-Flood
+#     → Volumetric Attack/TCP/ACK Flood/DupACK-Flood
+#
+# v5.4 变更说明：
+#   新增分类器（无新 YAML 配置项，复用 min_pkts.default）：
+#   - classify_tunnel_flood()：IPv6-over-IPv4 6in4 隧道洪泛（外层 IPv4 proto=41）
+#     子类：6in4-TCP-Flood / 6in4-UDP-Flood / 6in4-ICMPv6-Flood
+#     目录：Volumetric Attack/IPv6 Tunnel Flood/<子类>/IPv4/
+#   - classify_gre_flood() 增强：按内层 EtherType 细分
+#     GRE-IPv6-Flood (0x86DD) / GRE-PPTP-Flood (0x880b) / GRE-Flood (其余)
+#     目录：Volumetric Attack/IP Flood/<子类>/IPv4/
+#   - classify_ip_flood() KNOWN_PROTOS 新增 41（6in4），避免与隧道分类器重叠
+#
+# v5.3 变更说明：
+#   新增配置项：
+#   - dns.query_axfr_min    ：Query-AXFR/IXFR 触发阈值（区域传输放大攻击）
+#   - dns.query_dnskey_min  ：Query-DNSKEY/DS/RRSIG 触发阈值（DNSSEC 记录放大）
+#   - dns.query_txt_min     ：Query-TXT 触发阈值（SPF/DMARC 大文本放大）
+#   - https.http2_rapid_reset_duration：HTTP/2 Rapid Reset 最大会话时长（CVE-2023-44487）
+#   - https.h2_suspicious_appdata_min ：Suspicious-HTTP2 最少 AppData record 数
+#   Bug 修复（无新配置项，仅逻辑变更）：
+#   - GET/POST/HEAD Flood 现在通过 cats 统一双写 Government/HTTP 目录
+#   - Client-Hello-Flood 改为逐会话判定（不再受同 srcIP 其他会话影响）
+#   - Browser-Emulation 移出 dir_map，修复运行时 KeyError
+#
+# v5.1 变更说明：
+#   - 移除 udp_flood.random_sport_port_max（XX_{sport} 分类已删除）
+#   - UDP 反射诱发识别收紧为 AMPLIFICATION_REQUEST_VALIDATORS，各协议独立 request 校验
+#   - NTP mode=7 反射响应需 R bit=1；SSDP 反射响应需 HTTP/1.1 200 OK + UPnP 特征
+#   - DNS 反射诱发识别扩展（v5.3 进一步扩展至 7 种 qtype）
+#   - 各协议增加字符串特征识别（CLDAP/SSDP/Memcached/CoAP/WSD/Ubiquiti/SIP）
+#   - 文件名修正：SSDP_randomsport → SSDP-randomsport
+
+# ──────────────────────────────────────────────────────────
+# 全局：最小包数门槛（低于此数量不写出文件）
+# ──────────────────────────────────────────────────────────
+min_pkts:
+  default:          20    # 通用默认值（TCP/UDP/ICMP Flood、Malformed 等）
+  udp_reflection:  100    # UDP 反射报文（VN/Retry/Handshake/Binding Response 等）
+  amp_request:      50    # UDP 反射诱发报文（NTP MON_GETLIST/DNS ANY/STUN Binding Request 等）
+  fragment:        100    # IP 分片攻击 / IP Flood
+
+  # 以下 key 保留供参考，当前代码统一使用 udp_reflection 或 fragment 替代
+  quic:            100    # 备用：QUIC 各子类（当前使用 udp_reflection）
+  dns:             100    # 备用：DNS 各子类（当前使用 udp_reflection）
+  sip:             100    # 备用：SIP 各子类（当前使用 udp_reflection）
+  dtls_incomplete:   5    # DTLS Incomplete Session（代码直接使用此 key）
+  ip_flood:        100    # 备用：IP Flood（当前使用 fragment）
+  botnet:           50    # 备用：Botnet SYN（当前使用 min_pkts.default + botnet_threshold 联动）
+
+# ──────────────────────────────────────────────────────────
+# UDP Flood 检测
+# ──────────────────────────────────────────────────────────
+udp_flood:
+  fixedsport_min_pkts:        500   # 同一 sport 包数 ≥ 此值归 fixedsport
+  garbage_one_pkt_ratio:      0.8   # 单包流占比 > 此值才触发 garbage
+  garbage_src_ip_min:           5   # garbage 判定最少 src_ip 数
+  garbage_len_variety_min:      5   # garbage 判定最少包长种类数
+  garbage_payload_unique_ratio: 0.8 # garbage 判定 payload 唯一比 > 此值
+  highentropy_threshold:       6.5  # 高熵判定阈值（bits/byte）
+  highentropy_flow_min_pkts:     5  # 触发高熵判定的最小 flow 包数
+  # random_sport_port_max 已于 v5.1 移除（XX_{sport} 分类删除）
+
+# ──────────────────────────────────────────────────────────
+# UDP 反射
+# ──────────────────────────────────────────────────────────
+udp_reflection:
+  srcip_concentrated_threshold: 50  # srcIP 集中度判定阈值（≥N 包视为集中）
+                                    # 用于 dport=443/53/5060/5061 诱发报文过滤
+  # random_sport_min_src_ips 已移除：randomsport 反射无需 src_ip 集中度过滤
+  # UDP 反射成本远高于直接 Flood，payload validator 已足以判定反射特征
+
+# ──────────────────────────────────────────────────────────
+# UDP 反射诱发识别原则（v5.1，仅文档说明，无可调阈值）
+# ──────────────────────────────────────────────────────────
+# 原则1：UDP 反射（sport 匹配）优先级高于反射诱发（dport 匹配）
+# 原则2：诱发报文必须是 request 类型，各协议专属校验：
+#   DNS   ：仅 ANY 查询（qtype=255）
+#   NTP   ：MON_GETLIST request（mode=7，R bit=0）
+#   SNMP  ：GetBulk(0xa5) 或 GetRequest(0xa0)，或含 public community
+#   STUN  ：Binding Request（msg type=0x0001）
+#   SSDP  ：M-SEARCH 请求，含 upnp 特征
+#   CLDAP ：searchRequest（protocolOp=0x63），或含 'object class'
+#   Memcached：get/gets 命令，或含 'gets fakekey'
+#   Ubiquiti ：4字节探测包 \x01\x00\x00\x00 或 \x02\x08\x00\x00
+#   BACnet：Who-Is request（function=0x0b）
+#   WSD   ：含 'Probe' 字符串
+#   CoAP  ：GET to well-known/core 或 device URI
+#   SIP   ：仅 INVITE / OPTIONS / REGISTER（不含 ACK/BYE 等）
+#   QUIC  ：Initial 包
+# 原则3：反射响应按协议区分：
+#   固定端口协议（DNS/NTP/CLDAP/Memcached 等）：sport + payload 结构校验
+#   可变端口协议（SSDP）：payload 内容校验（HTTP/1.1 200 OK + UPnP 特征）
+#   NTP mode=7 响应：R bit=1 才算 response，R=0 是诱发报文
+# 原则4：支持字符串特征兜底识别（见各协议 validator 注释）
+
+# ──────────────────────────────────────────────────────────
+# TCP 慢速攻击（Slow Read / Sockstress）
+# ──────────────────────────────────────────────────────────
+slow_attack:
+  zero_win_min:       3    # 零窗口包数 ≥ 此值触发
+  small_win_min:      8    # 小窗口包数 ≥ 此值触发
+  small_win_max:      10   # 小窗口上限（字节，乘以 win_scale）
+  duration_min:      15.0  # 会话持续时间 ≥ 此值（秒）触发
+  slow_win_threshold: 10   # 备用：CLI --slow-win 默认值（当前使用 cli_defaults.slow_win_threshold）
+
+# ──────────────────────────────────────────────────────────
+# TCP 状态耗尽
+# ──────────────────────────────────────────────────────────
+tcp_state:
+  null_session_pure_ack_min: 300  # NullSession（TCP/HTTP/HTTPS）：纯 ACK 包数 ≥ 此值
+                                  # 注：HTTPS NullSession 同样使用此 key（https.null_session_pure_ack 已弃用）
+  l4cc_psh_ack_min:          300  # L4CC / PSH-ACK flood: ≥ 此值
+  # TCP-Replay-payload（独立分类器 classify_tcp_replay）：
+  # 针对 TCP 私有协议（如游戏）的会话回放攻击，多 srcIP 注入相同 payload
+  # 强制排除：HTTP/HTTPS 端口、含 SYN 的会话（避免与应用层攻击混淆）
+  replay_min_pkts:            10  # 单会话内最少 ACK+payload 报文数
+  replay_min_src_ips:          3  # 相同 payload 指纹（前64字节）至少来自几个不同 srcIP
+  replay_seq_growth_ratio:   0.8  # ACK 序列号严格递增比例门槛（区分乱序/随机注入）
+
+# ──────────────────────────────────────────────────────────
+# HTTP 应用层攻击
+# ──────────────────────────────────────────────────────────
+http:
+  min_sessions:              5   # ① dst_ip 总会话数门槛（低于此值不写出文件）
+                                 # ② srcIP 级别完整会话数门槛（低于此值不归入 RST-Session /
+                                 #    DirectIP-Access / Abnormal-UA / Proxy-Access / Abnormal-URL）
+                                 # ③ rootpath / Range-Amplification 最少请求次数门槛
+  get_flood_min_reqs:       10   # GET Flood 触发：srcIP 请求数 ≥ 此值
+  post_flood_min_reqs:       2   # POST Flood 触发
+  head_flood_min_reqs:       2   # HEAD Flood 触发
+  other_method_min_reqs:     5   # Other Method Flood 触发（已从 2 提升至 5）
+  single_url_min_reqs:       5   # Single URL：同 URL 请求 > 此值
+  multiple_url_min_reqs:    10   # Multiple URL：总请求 ≥ 此值
+  bigresource_min_reqs:     10   # BigResource：总请求 ≥ 此值
+  bigresource_ack_growth: 51200  # BigResource：ACK 增长 > 此值（字节，约 50KB）
+  slow_post_psh_min:         5   # SlowPOST：后续小 PSH 包数 ≥ 此值
+  slow_post_psh_max_len:    45   # SlowPOST：小 PSH 包最大长度（字节）
+  slow_headers_psh_min:      3   # SlowHeaders：后续小 PSH 包数 ≥ 此值
+  slow_headers_psh_max_len: 45   # SlowHeaders：小 PSH 包最大长度（字节）
+  tcp_seg_evasion_min:      10   # TCP Seg Evasion：单个HTTP请求中payload<100B的小分段数 ≥ 此值
+  param_pollution_query_len: 500 # HTTP Parameter Pollution：查询字符串总长 > 此值（字节）
+  browser_emulation_min_reqs: 3  # Browser Emulation：最少请求数
+  browser_emulation_min_sub:  2  # Browser Emulation：根目录后最少不同 URL 数
+  multiple_method_min_pkt_len: 100  # Multiple Method：单包最小长度（才做检测）
+  random_url_min_reqs:        5  # 备用：Random URL 最少请求数（当前代码直接使用硬编码值）
+  random_url_random_ratio:  0.5  # Random URL：随机参数名占比 > 此值
+
+# ──────────────────────────────────────────────────────────
+# HTTPS 应用层攻击
+# ──────────────────────────────────────────────────────────
+https:
+  same_pkt_len_min_pkts:     5   # Same Request PktLen：每种长度指纹最少命中数
+  same_pkt_len_consistency: 0.8  # Same Request PktLen：AppData 长度一致性阈值（合格指纹占比 ≥ 此值触发）
+  bigresource_min_sessions: 10   # BigResource / EncryptedCC：会话数 ≥ 此值
+  client_hello_min:          2   # 同一会话内 ClientHello 出现 ≥ 此值时跳过（THC-SSL 多次重协商检测上游）
+  ccs_min:                   2   # THC-SSL：同一会话 CCS（ChangeCipherSpec）≥ 此值触发
+  tls_max_record_len:     16384  # TLS record 最大合法长度（字节）
+  http2_rapid_reset_duration:    5.0  # HTTP/2 Rapid Reset（CVE-2023-44487）：会话时长 ≤ 此值（秒）才触发
+  http2_rapid_reset_appdata_min: 500  # HTTP/2 Rapid Reset：单会话 AppData TLS record 数 ≥ 此值才触发
+                                      # 关键鉴别阈值：正常 h2 连接（爬虫/浏览器）仅 2~4 个 AppData record，
+                                      # 真实 Rapid Reset 每连接制造数百~数千 stream，产生大量 AppData record
+  h2_suspicious_appdata_min:      1   # Suspicious-HTTP2：客户端 AppData TLS record 数门槛（默认1）
+                                      # 仅做"真实TLS会话"过滤，避免握手失败/空连接误触发
+                                      # 核心判据是 ALPN 仅含 h2 而无 http/1.x（正常浏览器会同时声明回退版本）
+  h2_suspicious_min_sessions:     2   # Suspicious-HTTP2 兜底：srcIP 完整会话数 ≥ 此值即可触发
+                                      # 从原共享的 min_sessions(5) 独立出来，降低门槛兼容小规模高强度攻击
+                                      # （如视频拉流：每 srcIP 仅 2~3 个会话即打满带宽）
+  # 以下 key 保留供参考，当前代码使用 tcp_state.null_session_pure_ack_min 替代
+  null_session_pure_ack:   300   # 备用：HTTPS NullSession 纯 ACK 阈值（当前使用 tcp_state.null_session_pure_ack_min）
+  min_sessions:              5   # srcIP 级别完整会话数门槛：低于此值不归入
+                                 # plaintext-access / Abnormal-SNI / RST-Session /
+                                 # MultipleAD-perPacket / Suspicious-HTTP2
+                                 # 以下为分布式攻击（每 bot 1~2 会话），不受此门槛：
+                                 # Client-Hello-Flood / Negotiation-Abuse / THC-SSL /
+                                 # HTTPS-NullSession / SlowRead / HTTP2-Rapid-Reset
+
+# ──────────────────────────────────────────────────────────
+# QUIC
+# ──────────────────────────────────────────────────────────
+quic:
+  min_udp_length:      21   # QUIC 最小合法 UDP payload 长度
+  sport_min:         1024   # sport < 此值视为 Malformed
+  conn_id_flood_ratio: 0.9  # conn_id 唯一比 > 此值视为 UDP Flood（非 QUIC 攻击）
+
+# ──────────────────────────────────────────────────────────
+# JA4 TLS 客户端指纹（HTTPS 攻击自聚类 + 黑名单识别）
+# ──────────────────────────────────────────────────────────
+ja4:
+  botnet_min_src_ips:  10   # JA4-Botnet 自聚类：同 JA4 → 同 dst 出现的不同 srcIP 数 ≥ 此值
+                            # 含义：分布式僵尸网络使用同一攻击工具/版本，TLS 指纹必然相同
+                            # 调低（如 3~5）适合小规模攻击；调高（20+）减少误报
+  enable_metadata_log: true # 是否在 verbose 输出中打印每文件 JA4 摘要（用于人工沉淀私有指纹库）
+# JA4 黑名单文件：在脚本同目录放置 ja4_blacklist.json（JSON 数组，支持 * 通配）
+# 或通过 --ja4-blacklist <path> 指定。匹配即归 Application Attack/HTTPS/JA4-Malicious/
+
+# ──────────────────────────────────────────────────────────
+# DNS
+# ──────────────────────────────────────────────────────────
+dns:
+  malformed_min:      10   # Malformed DNS 触发阈值
+  random_sub_min:     10   # 随机子域名攻击触发阈值
+  nxdomain_min:       50   # NXDOMAIN Flood 触发阈值
+  samesubnet_min:     10   # 同网段扫描触发阈值
+  dns_sec_min:        50   # DNS-Sec（DNSSEC DO bit 查询）触发阈值
+  query_any_min:      50   # Query-ANY：qtype=255（ANY）触发阈值
+  query_opt_rr_min:   50   # Query-OPT-RR：EDNS0 udp_size ≥ opt_rr_udp_size 触发阈值
+  query_axfr_min:     10   # Query-AXFR：qtype=252(AXFR)/251(IXFR) 区域传输放大，正常几乎不出现，阈值低
+  query_dnskey_min:   20   # Query-DNSKEY：qtype=48(DNSKEY)/43(DS)/46(RRSIG) DNSSEC 记录放大 20–70×
+  query_txt_min:      50   # Query-TXT：qtype=16(TXT) SPF/DMARC 大文本放大 10–50×
+  query_min:          50   # 通用 Query Flood 兜底触发阈值
+  opt_rr_udp_size:  1500   # EDNS0 大包判定：udp_size ≥ 此值
+  mdns_qdcount_max:   10   # mDNS validator：qdcount > 此值视为随机 payload
+  # response_min 保留供参考，当前 DNS Response Flood 使用 min_pkts.udp_reflection
+  response_min:       50   # 备用：DNS Response Flood 触发阈值（当前使用 min_pkts.udp_reflection）
+
+# ──────────────────────────────────────────────────────────
+# Abnormal URL
+# ──────────────────────────────────────────────────────────
+abnormal_url:
+  garbled_non_print_min:    3    # URL 非打印字符数 > 此值触发乱码判定
+  garbled_non_print_ratio: 0.2  # URL 非打印字符占比 > 此值触发乱码判定
+
+# ──────────────────────────────────────────────────────────
+# 命令行默认值（可被 CLI 参数覆盖）
+# ──────────────────────────────────────────────────────────
+cli_defaults:
+  http_ports:         [80, 8080]
+  https_ports:        [443, 8443]
+  botnet_threshold:   50    # SYN Botnet 判定阈值：单 srcIP 的 SYN 数 ≥ 此值
+  slow_win_threshold: 10    # Slow Attack 小窗口上限（字节），对应 --slow-win 参数

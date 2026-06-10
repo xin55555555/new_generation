@@ -1,0 +1,391 @@
+{
+  "meta": {
+    "source_classifier": "核心脚本/攻击分类/ddos_classifier_v5_5.py",
+    "normalized_attack_types_source": "pipeline/policy_mapper.py",
+    "base_template_source": "华为antiddos1908/模板/policy.json",
+    "device_family": "Huawei AntiDDoS1908",
+    "description": "Mapping from normalized attack types to recommended AntiDDoS1908 policy entries to tune.",
+    "notes": [
+      "primary_entries are the first entries to tune for that attack type.",
+      "secondary_entries are supporting or optional entries.",
+      "generic_entries are broad traffic controls that often move together with the attack-specific entries.",
+      "automation_ready means we currently have enough confidence to auto-fill parameters from pcap features with the current repository logic."
+    ]
+  },
+  "common_generic_entries": [
+    "Zone_Traffic_Limiting",
+    "Traffic_Limiting_For_Single_Ip",
+    "Zone_Filter_Drop_Rate"
+  ],
+  "attack_type_mapping": {
+    "SYN_FLOOD": {
+      "protocol": "tcp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Tcp_Syn_Flood",
+        "Tcp_Syn_First_Packet_Check",
+        "Syn_Flood_Src_Challenge_Auth",
+        "Tcp_Syn_Abn_Src_Limit",
+        "Syn_Flood_Abnormal_Src_Block"
+      ],
+      "secondary_entries": [
+        "Tcp_Traffic_Limiting",
+        "Tcp_New_Conn_Limiting",
+        "Tcp_Abn_Syn_Conn_Detect"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "notes": "Mainly adjust SYN threshold, first-packet check, source challenge/auth, and abnormal source detection."
+    },
+    "TCP_SYNACK_FLOOD": {
+      "protocol": "tcp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Tcp_SynAck_Flood",
+        "Tcp_SynAck_First_Packet_Check",
+        "Tcp_SynAck_Source_Challenge_Mode",
+        "Tcp_SynAck_Abnormal_Source_Detection"
+      ],
+      "secondary_entries": [
+        "Tcp_Traffic_Limiting"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "notes": "Tune SYN-ACK flood threshold, first-packet check, challenge mode, and abnormal source heuristics."
+    },
+    "ACK_FLOOD": {
+      "protocol": "tcp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Tcp_Ack_Flood_Attack",
+        "Tcp_Ack_First_Packet_Check",
+        "Tcp_Ack_Session_Detection_Mode",
+        "Tcp_Ack_Src_Challenge_Auth",
+        "Tcp_Ack_Session_Behavior_Analysis",
+        "Tcp_Ack_Src_Low_Speed_Behavior_Analysis",
+        "Tcp_Abn_Ack_Conn_Detect"
+      ],
+      "secondary_entries": [
+        "Tcp_Traffic_Limiting"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "notes": "ACK flood usually needs both flood threshold and abnormal ACK connection/session behavior entries."
+    },
+    "TCP_FLOOD": {
+      "protocol": "tcp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Tcp_Traffic_Limiting",
+        "Tcp_Abnormal",
+        "Tcp_Flag_Abnormal"
+      ],
+      "secondary_entries": [
+        "Tcp_Fin_Flood",
+        "Tcp_Fragment_Traffic_Limiting",
+        "Tcp_New_Conn_Limiting"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "notes": "Use FIN/fragment/new-conn subentries depending on the concrete TCP flood subtype."
+    },
+    "TCP_STATE_EXHAUSTION": {
+      "protocol": "tcp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Tcp_Concurrent_Connection_Check_By_Destination_Ip",
+        "Tcp_New_Connection_Rate_Check_By_Destination_Ip",
+        "Tcp_Connection_Number_Check_For_Source_Ip",
+        "Tcp_New_Connection_Rate_Check_By_Source_Ip",
+        "Tcp_Src_Null_Conn_Detect",
+        "Tcp_Src_Sockstress_Detect",
+        "Tcp_Src_Abn_Conn_Drop",
+        "Tcp_Conn_Source_Behavior_Analysis_Drop"
+      ],
+      "secondary_entries": [
+        "Tcp_New_Conn_Limiting"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting"
+      ],
+      "notes": "This family is connection-state driven, so destination/source connection counters and abnormal connection detectors matter more than raw pps."
+    },
+    "UDP_FLOOD": {
+      "protocol": "udp",
+      "automation_ready": true,
+      "primary_entries": [
+        "Udp_Traffic_Limiting",
+        "Udp_Abnormal",
+        "Udp_New_Conn_Limiting"
+      ],
+      "secondary_entries": [
+        "Udp_Session_Behavior_Detect_Packet_Interval",
+        "Udp_Correlation",
+        "Udp_Rel_Tcp_Defense",
+        "Udp_Traffic_Limiting_Strict",
+        "Udp_Fragment_Rate_Limiting"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "notes": "Current auto-generator tunes this family from pcap features such as pps, fixed length, fixed payload, source count, and destination-port dispersion."
+    },
+    "UDP_REFLECTION": {
+      "protocol": "udp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "secondary_entries": [
+        "Udp_Correlation",
+        "Udp_Abnormal"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "notes": "If the reflected protocol is known, prefer protocol-specific entries such as DNS or SIP over pure generic UDP controls."
+    },
+    "UDP_AMPLIFICATION": {
+      "protocol": "udp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "secondary_entries": [
+        "Udp_Correlation",
+        "Udp_Abnormal"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "notes": "Same strategy family as reflection; refine with protocol-specific entries when amplification protocol is known."
+    },
+    "AMPLIFICATION_REQUEST": {
+      "protocol": "udp",
+      "automation_ready": false,
+      "primary_entries": [],
+      "secondary_entries": [],
+      "generic_entries": [],
+      "notes": "This often means the local side is the request initiator. Default to manual review before auto-blocking."
+    },
+    "ICMP_FLOOD": {
+      "protocol": "icmp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Icmp_Traffic_Limiting"
+      ],
+      "secondary_entries": [],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "notes": "ICMP control is straightforward: mainly traffic limiting."
+    },
+    "GRE_FLOOD": {
+      "protocol": "gre",
+      "automation_ready": false,
+      "primary_entries": [
+        "Other_Traffic_Limiting"
+      ],
+      "secondary_entries": [
+        "Other_New_Conn_Limiting"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "notes": "No explicit GRE entry exists in the template export; use generic Other/IP controls."
+    },
+    "IP_FLOOD": {
+      "protocol": "ip",
+      "automation_ready": false,
+      "primary_entries": [
+        "Other_Traffic_Limiting"
+      ],
+      "secondary_entries": [
+        "Other_New_Conn_Limiting"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "notes": "No explicit IP flood field exists in the template export; use generic Other/IP controls."
+    },
+    "HTTP_APP": {
+      "protocol": "tcp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Http_First_Packet_Drop",
+        "Http_Source_Authentication_Defense",
+        "Http_Suspicious_Src_Challenge",
+        "Http_Abn_Src_Block",
+        "Http_Abn_Conn_Defense"
+      ],
+      "secondary_entries": [
+        "Http_FingerPrint_Learn",
+        "Http_Multiple_Uri_Detect",
+        "Http_Single_Uri_Detect",
+        "Http_Large_Resource_Detect",
+        "Http_Src_Low_Frequency_Detect",
+        "Http_Slowloris_Detect",
+        "Http_Src_Abn_Conn_Detect",
+        "Http_Null_Conn_Detect",
+        "Http_Range_Amp_Detect",
+        "Http_Multi_Method_Conn_Detect",
+        "Http_Src_Captcha_Caption",
+        "Http_Src_Proxy",
+        "Http_Src_Proxy_Keyword"
+      ],
+      "generic_entries": [],
+      "notes": "Prefer HTTP-specific policy entries over generic TCP flood entries."
+    },
+    "HTTPS_APP": {
+      "protocol": "tcp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Tls_Attack_Dst_Ip",
+        "Tls_Src_Challenge_Auth",
+        "Tls_Suspicious_Src_Challenge",
+        "Tls_Session_Attack_Defense"
+      ],
+      "secondary_entries": [
+        "Tls_FingerPrint_Detect",
+        "Tls_Unfixed_Resource_Detect",
+        "Tls_Large_Resource_Detect",
+        "Tls_Fixed_Resource_Detect",
+        "Tls_Src_Low_Frequency_Requests_Detect",
+        "Tls_Null_Conn_Detect",
+        "Tls_Incomplete_Conn_Detect",
+        "Tls_Renegotiation_Detect"
+      ],
+      "generic_entries": [],
+      "notes": "TLS/HTTPS strategies are more behavior-specific than raw flood-threshold based."
+    },
+    "QUIC_APP": {
+      "protocol": "udp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Quic_Flood",
+        "Quic_Src_Challenge_Auth"
+      ],
+      "secondary_entries": [
+        "Quic_Malformed_Packet_Check"
+      ],
+      "generic_entries": [
+        "Udp_Traffic_Limiting"
+      ],
+      "notes": "Use QUIC-specific entries first, generic UDP limiting second."
+    },
+    "DNS_REQUEST_FLOOD": {
+      "protocol": "udp",
+      "automation_ready": true,
+      "primary_entries": [
+        "Dns_Query_Flood",
+        "Dns_Query_First_Packet_Check",
+        "Dns_Src_Query_Limiting"
+      ],
+      "secondary_entries": [
+        "Dns_Abnormal"
+      ],
+      "generic_entries": [
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "notes": "Current repo already has a DNS request template filler that derives thresholds from pcap features and models TC/TCP source-auth as logical fields."
+    },
+    "DNS_REPLY_FLOOD": {
+      "protocol": "udp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Dns_Reply_Flood",
+        "Dns_Reply_First_Packet_Check",
+        "Dns_Src_Reply_Limiting"
+      ],
+      "secondary_entries": [
+        "Dns_Abnormal"
+      ],
+      "generic_entries": [
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "notes": "Best paired with DNS reply source-auth logic when the deployment supports it."
+    },
+    "DNS_APP": {
+      "protocol": "udp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Dns_Query_Flood",
+        "Dns_Reply_Flood",
+        "Dns_Src_Query_Limiting",
+        "Dns_Src_Reply_Limiting"
+      ],
+      "secondary_entries": [
+        "Dns_Query_First_Packet_Check",
+        "Dns_Reply_First_Packet_Check",
+        "Dns_Abnormal"
+      ],
+      "generic_entries": [
+        "Udp_Traffic_Limiting"
+      ],
+      "notes": "Use when DNS attack is known but the traffic has not yet been separated into query-vs-reply families."
+    },
+    "SIP_APP": {
+      "protocol": "udp",
+      "automation_ready": false,
+      "primary_entries": [
+        "Sip_Flood",
+        "Sip_Limiting"
+      ],
+      "secondary_entries": [],
+      "generic_entries": [
+        "Udp_Traffic_Limiting"
+      ],
+      "notes": "SIP-specific limiting should take precedence over generic UDP controls."
+    },
+    "DTLS_APP": {
+      "protocol": "udp",
+      "automation_ready": false,
+      "primary_entries": [],
+      "secondary_entries": [
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Udp_Abnormal"
+      ],
+      "generic_entries": [
+        "Zone_Traffic_Limiting"
+      ],
+      "notes": "No explicit DTLS entry exists in the current template export; use generic UDP controls."
+    },
+    "UNKNOWN_DDOS": {
+      "protocol": "ip",
+      "automation_ready": false,
+      "primary_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Other_Traffic_Limiting"
+      ],
+      "secondary_entries": [
+        "Other_New_Conn_Limiting",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "generic_entries": [],
+      "notes": "Fallback family for manual review when the classified type does not align cleanly with the template entries."
+    }
+  }
+}

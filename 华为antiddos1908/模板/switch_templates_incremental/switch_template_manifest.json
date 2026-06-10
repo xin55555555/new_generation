@@ -1,0 +1,1039 @@
+{
+  "meta": {
+    "base_template": "config/policy_t.json",
+    "mapping_json": "华为antiddos1908/模板/attack_type_parameter_map.json",
+    "output_dir": "华为antiddos1908/模板/switch_templates_incremental",
+    "strategy": {
+      "template_mode": "incremental_patch",
+      "comparison_baseline": "config/policy_t.json",
+      "enable_primary_entries": true,
+      "enable_generic_entries": true,
+      "enable_secondary_entries": false,
+      "threshold_policy": "threshold values normally inherit from policy_t.json; SYN_FLOOD has an experimental sensitivity override for simulator validation",
+      "experimental_threshold_overrides": {
+        "SYN_FLOOD": {
+          "Tcp_Syn_First_Packet_Check": "0.3-2",
+          "Tcp_Syn_Abn_Src_Limit": "30,2",
+          "Syn_Flood_Abnormal_Src_Block": "60,10,2,2,10"
+        }
+      }
+    },
+    "strict_profile_source": {
+      "xlsx": "config/ATIC策略配置基线20260602.xlsx",
+      "sheet": "ATIC策略配置-R25.0",
+      "column": "严格-Strict"
+    }
+  },
+  "templates": [
+    {
+      "normalized_attack_type": "ACK_FLOOD",
+      "protocol": "tcp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Tcp_Ack_Flood_Attack",
+        "Tcp_Ack_First_Packet_Check",
+        "Tcp_Ack_Session_Detection_Mode",
+        "Tcp_Ack_Src_Challenge_Auth",
+        "Tcp_Ack_Session_Behavior_Analysis",
+        "Tcp_Ack_Src_Low_Speed_Behavior_Analysis",
+        "Tcp_Abn_Ack_Conn_Detect",
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "optional_entries": [
+        "Tcp_Traffic_Limiting"
+      ],
+      "notes": "ACK flood usually needs both flood threshold and abnormal ACK connection/session behavior entries.",
+      "changed_entry_count": 7,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Ack_Flood_Attack",
+          "new_enable_status": 1,
+          "threshold": "500000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Ack_Flood_Attack_Bandwidth",
+          "new_enable_status": 1,
+          "threshold": "2000000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Ack_First_Packet_Check",
+          "new_enable_status": 1,
+          "threshold": "0-6",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Ack_Session_Detection_Mode",
+          "new_enable_status": 1,
+          "threshold": null,
+          "mode_type": 0
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Ack_Src_Low_Speed_Behavior_Analysis",
+          "new_enable_status": 1,
+          "threshold": "10",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Ack_Session_Behavior_Analysis",
+          "new_enable_status": 1,
+          "threshold": "5000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Abn_Ack_Conn_Detect",
+          "new_enable_status": 1,
+          "threshold": "1000,90,20",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [
+        "Tcp_Ack_Session_Detection_Mode"
+      ],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/ack_flood.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "AMPLIFICATION_REQUEST",
+      "protocol": "udp",
+      "automation_ready": false,
+      "enabled_entries": [],
+      "optional_entries": [],
+      "notes": "This often means the local side is the request initiator. Default to manual review before auto-blocking.",
+      "changed_entry_count": 0,
+      "changes": [],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/amplification_request.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "DNS_APP",
+      "protocol": "udp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Dns_Query_Flood",
+        "Dns_Reply_Flood",
+        "Dns_Src_Query_Limiting",
+        "Dns_Src_Reply_Limiting",
+        "Udp_Traffic_Limiting"
+      ],
+      "optional_entries": [
+        "Dns_Query_First_Packet_Check",
+        "Dns_Reply_First_Packet_Check",
+        "Dns_Abnormal"
+      ],
+      "notes": "Use when DNS attack is known but the traffic has not yet been separated into query-vs-reply families.",
+      "changed_entry_count": 4,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Dns_Abnormal",
+          "new_enable_status": 1,
+          "threshold": "2000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Dns_Query_Flood",
+          "new_enable_status": 1,
+          "threshold": "5000",
+          "mode_type": 2
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Dns_Query_First_Packet_Check",
+          "new_enable_status": 1,
+          "threshold": "1-5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Dns_Src_Query_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/dns_app.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "DNS_REPLY_FLOOD",
+      "protocol": "udp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Dns_Reply_Flood",
+        "Dns_Reply_First_Packet_Check",
+        "Dns_Src_Reply_Limiting",
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "optional_entries": [
+        "Dns_Abnormal"
+      ],
+      "notes": "Best paired with DNS reply source-auth logic when the deployment supports it.",
+      "changed_entry_count": 0,
+      "changes": [],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/dns_reply_flood.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "DNS_REQUEST_FLOOD",
+      "protocol": "udp",
+      "automation_ready": true,
+      "enabled_entries": [
+        "Dns_Query_Flood",
+        "Dns_Query_First_Packet_Check",
+        "Dns_Src_Query_Limiting",
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "optional_entries": [
+        "Dns_Abnormal"
+      ],
+      "notes": "Current repo already has a DNS request template filler that derives thresholds from pcap features and models TC/TCP source-auth as logical fields.",
+      "changed_entry_count": 4,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Dns_Abnormal",
+          "new_enable_status": 1,
+          "threshold": "2000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Dns_Query_Flood",
+          "new_enable_status": 1,
+          "threshold": "5000",
+          "mode_type": 2
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Dns_Query_First_Packet_Check",
+          "new_enable_status": 1,
+          "threshold": "1-5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Dns_Src_Query_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/dns_request_flood.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "DTLS_APP",
+      "protocol": "udp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Zone_Traffic_Limiting"
+      ],
+      "optional_entries": [
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Udp_Abnormal"
+      ],
+      "notes": "No explicit DTLS entry exists in the current template export; use generic UDP controls.",
+      "changed_entry_count": 2,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "2000000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_New_Conn_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/dtls_app.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "GRE_FLOOD",
+      "protocol": "gre",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Other_Traffic_Limiting",
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "optional_entries": [
+        "Other_New_Conn_Limiting"
+      ],
+      "notes": "No explicit GRE entry exists in the template export; use generic Other/IP controls.",
+      "changed_entry_count": 2,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Other_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "500000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Other_New_Conn_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/gre_flood.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "HTTPS_APP",
+      "protocol": "tcp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Tls_Attack_Dst_Ip",
+        "Tls_Src_Challenge_Auth",
+        "Tls_Suspicious_Src_Challenge",
+        "Tls_Session_Attack_Defense"
+      ],
+      "optional_entries": [
+        "Tls_FingerPrint_Detect",
+        "Tls_Unfixed_Resource_Detect",
+        "Tls_Large_Resource_Detect",
+        "Tls_Fixed_Resource_Detect",
+        "Tls_Src_Low_Frequency_Requests_Detect",
+        "Tls_Null_Conn_Detect",
+        "Tls_Incomplete_Conn_Detect",
+        "Tls_Renegotiation_Detect"
+      ],
+      "notes": "TLS/HTTPS strategies are more behavior-specific than raw flood-threshold based.",
+      "changed_entry_count": 10,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_Attack_Dst_Ip",
+          "new_enable_status": 1,
+          "threshold": "200000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_Src_Challenge_Auth",
+          "new_enable_status": 1,
+          "threshold": null,
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_Unfixed_Resource_Detect",
+          "new_enable_status": 1,
+          "threshold": "2000,1,3",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_FingerPrint_Detect",
+          "new_enable_status": 1,
+          "threshold": "5,60,5000,3",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_Large_Resource_Detect",
+          "new_enable_status": 1,
+          "threshold": "5000,90,200,3",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_Fixed_Resource_Detect",
+          "new_enable_status": 1,
+          "threshold": "90,200,5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_Session_Attack_Defense",
+          "new_enable_status": 1,
+          "threshold": "100000,10,5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_Null_Conn_Detect",
+          "new_enable_status": 1,
+          "threshold": "30,5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_Incomplete_Conn_Detect",
+          "new_enable_status": 1,
+          "threshold": "10,5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tls_Rst_Conn_Detect",
+          "new_enable_status": 1,
+          "threshold": "100,1",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [
+        "Tls_Src_Challenge_Auth"
+      ],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/https_app.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "HTTP_APP",
+      "protocol": "tcp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Http_First_Packet_Drop",
+        "Http_Source_Authentication_Defense",
+        "Http_Suspicious_Src_Challenge",
+        "Http_Abn_Src_Block",
+        "Http_Abn_Conn_Defense"
+      ],
+      "optional_entries": [
+        "Http_FingerPrint_Learn",
+        "Http_Multiple_Uri_Detect",
+        "Http_Single_Uri_Detect",
+        "Http_Large_Resource_Detect",
+        "Http_Src_Low_Frequency_Detect",
+        "Http_Slowloris_Detect",
+        "Http_Src_Abn_Conn_Detect",
+        "Http_Null_Conn_Detect",
+        "Http_Range_Amp_Detect",
+        "Http_Multi_Method_Conn_Detect",
+        "Http_Src_Captcha_Caption",
+        "Http_Src_Proxy",
+        "Http_Src_Proxy_Keyword"
+      ],
+      "notes": "Prefer HTTP-specific policy entries over generic TCP flood entries.",
+      "changed_entry_count": 8,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Http_Abn_Src_Block",
+          "new_enable_status": 1,
+          "threshold": "10,5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Http_Single_Uri_Detect",
+          "new_enable_status": 1,
+          "threshold": "90,50,5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Http_Large_Resource_Detect",
+          "new_enable_status": 1,
+          "threshold": "5000,90,200,3",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Http_Slowloris_Detect",
+          "new_enable_status": 1,
+          "threshold": "10000,50,10",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Http_Abn_Conn_Defense",
+          "new_enable_status": 1,
+          "threshold": "50000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Http_Null_Conn_Detect",
+          "new_enable_status": 1,
+          "threshold": "30,5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Http_Range_Amp_Detect",
+          "new_enable_status": 1,
+          "threshold": "200,5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Http_Multi_Method_Conn_Detect",
+          "new_enable_status": 1,
+          "threshold": "30,5",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/http_app.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "ICMP_FLOOD",
+      "protocol": "icmp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Icmp_Traffic_Limiting",
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "optional_entries": [],
+      "notes": "ICMP control is straightforward: mainly traffic limiting.",
+      "changed_entry_count": 1,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Icmp_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "2000",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/icmp_flood.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "IP_FLOOD",
+      "protocol": "ip",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Other_Traffic_Limiting",
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "optional_entries": [
+        "Other_New_Conn_Limiting"
+      ],
+      "notes": "No explicit IP flood field exists in the template export; use generic Other/IP controls.",
+      "changed_entry_count": 2,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Other_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "500000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Other_New_Conn_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/ip_flood.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "QUIC_APP",
+      "protocol": "udp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Quic_Flood",
+        "Quic_Src_Challenge_Auth",
+        "Udp_Traffic_Limiting"
+      ],
+      "optional_entries": [
+        "Quic_Malformed_Packet_Check"
+      ],
+      "notes": "Use QUIC-specific entries first, generic UDP limiting second.",
+      "changed_entry_count": 2,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "2000000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_New_Conn_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/quic_app.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "SIP_APP",
+      "protocol": "udp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Sip_Flood",
+        "Sip_Limiting",
+        "Udp_Traffic_Limiting"
+      ],
+      "optional_entries": [],
+      "notes": "SIP-specific limiting should take precedence over generic UDP controls.",
+      "changed_entry_count": 0,
+      "changes": [],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/sip_app.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "SYN_FLOOD",
+      "protocol": "tcp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Tcp_Syn_Flood",
+        "Tcp_Syn_First_Packet_Check",
+        "Syn_Flood_Src_Challenge_Auth",
+        "Tcp_Syn_Abn_Src_Limit",
+        "Syn_Flood_Abnormal_Src_Block",
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "optional_entries": [
+        "Tcp_Traffic_Limiting",
+        "Tcp_New_Conn_Limiting",
+        "Tcp_Abn_Syn_Conn_Detect"
+      ],
+      "notes": "Mainly adjust SYN threshold, first-packet check, source challenge/auth, and abnormal source detection. Experimental threshold tuning: Tcp_Syn_First_Packet_Check=0.3-2, Tcp_Syn_Abn_Src_Limit=30,2, Syn_Flood_Abnormal_Src_Block=60,10,2,2,10.",
+      "changed_entry_count": 4,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Syn_First_Packet_Check",
+          "new_enable_status": 1,
+          "threshold": "0.3-2",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Syn_Advanced_Detection",
+          "new_enable_status": 1,
+          "threshold": null,
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Syn_Abn_Src_Limit",
+          "new_enable_status": 1,
+          "threshold": "30,2",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Syn_Flood_Abnormal_Src_Block",
+          "new_enable_status": 1,
+          "threshold": "60,10,2,2,10",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [
+        "Syn_Advanced_Detection"
+      ],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/syn_flood.switch_template.incremental.json",
+      "threshold_tuning": {
+        "mode": "experimental_syn_flood_sensitivity",
+        "overrides": {
+          "Tcp_Syn_First_Packet_Check": "0.3-2",
+          "Tcp_Syn_Abn_Src_Limit": "30,2",
+          "Syn_Flood_Abnormal_Src_Block": "60,10,2,2,10"
+        }
+      }
+    },
+    {
+      "normalized_attack_type": "TCP_FLOOD",
+      "protocol": "tcp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Tcp_Traffic_Limiting",
+        "Tcp_Abnormal",
+        "Tcp_Flag_Abnormal",
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "optional_entries": [
+        "Tcp_Fin_Flood",
+        "Tcp_Fragment_Traffic_Limiting",
+        "Tcp_New_Conn_Limiting"
+      ],
+      "notes": "Use FIN/fragment/new-conn subentries depending on the concrete TCP flood subtype.",
+      "changed_entry_count": 4,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Abnormal",
+          "new_enable_status": 1,
+          "threshold": "2000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Fin_Flood",
+          "new_enable_status": 1,
+          "threshold": "50000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Fragment_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_New_Conn_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/tcp_flood.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "TCP_STATE_EXHAUSTION",
+      "protocol": "tcp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Tcp_Concurrent_Connection_Check_By_Destination_Ip",
+        "Tcp_New_Connection_Rate_Check_By_Destination_Ip",
+        "Tcp_Connection_Number_Check_For_Source_Ip",
+        "Tcp_New_Connection_Rate_Check_By_Source_Ip",
+        "Tcp_Src_Null_Conn_Detect",
+        "Tcp_Src_Sockstress_Detect",
+        "Tcp_Src_Abn_Conn_Drop",
+        "Tcp_Conn_Source_Behavior_Analysis_Drop",
+        "Zone_Traffic_Limiting"
+      ],
+      "optional_entries": [
+        "Tcp_New_Conn_Limiting"
+      ],
+      "notes": "This family is connection-state driven, so destination/source connection counters and abnormal connection detectors matter more than raw pps.",
+      "changed_entry_count": 5,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Concurrent_Connection_Check_By_Destination_Ip",
+          "new_enable_status": 1,
+          "threshold": "500000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_New_Connection_Rate_Check_By_Destination_Ip",
+          "new_enable_status": 1,
+          "threshold": "10000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Connection_Number_Check_For_Source_Ip",
+          "new_enable_status": 1,
+          "threshold": "2000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Src_Null_Conn_Detect",
+          "new_enable_status": 1,
+          "threshold": "1,5,50,5",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_Src_Abn_Conn_Drop",
+          "new_enable_status": 1,
+          "threshold": "50,5",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/tcp_state_exhaustion.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "TCP_SYNACK_FLOOD",
+      "protocol": "tcp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Tcp_SynAck_Flood",
+        "Tcp_SynAck_First_Packet_Check",
+        "Tcp_SynAck_Source_Challenge_Mode",
+        "Tcp_SynAck_Abnormal_Source_Detection",
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip"
+      ],
+      "optional_entries": [
+        "Tcp_Traffic_Limiting"
+      ],
+      "notes": "Tune SYN-ACK flood threshold, first-packet check, challenge mode, and abnormal source heuristics.",
+      "changed_entry_count": 2,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_SynAck_Flood",
+          "new_enable_status": 1,
+          "threshold": "50000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Tcp_SynAck_First_Packet_Check",
+          "new_enable_status": 1,
+          "threshold": "0.5-4",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/tcp_synack_flood.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "UDP_AMPLIFICATION",
+      "protocol": "udp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Zone_Traffic_Limiting",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "optional_entries": [
+        "Udp_Correlation",
+        "Udp_Abnormal"
+      ],
+      "notes": "Same strategy family as reflection; refine with protocol-specific entries when amplification protocol is known.",
+      "changed_entry_count": 4,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "2000000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Fragment_Rate_Limiting",
+          "new_enable_status": 1,
+          "threshold": "50000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_New_Conn_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Statistics_Based_On_Destination_Ip",
+          "new_enable_status": 1,
+          "threshold": "50000",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/udp_amplification.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "UDP_FLOOD",
+      "protocol": "udp",
+      "automation_ready": true,
+      "enabled_entries": [
+        "Udp_Traffic_Limiting",
+        "Udp_Abnormal",
+        "Udp_New_Conn_Limiting",
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "optional_entries": [
+        "Udp_Session_Behavior_Detect_Packet_Interval",
+        "Udp_Correlation",
+        "Udp_Rel_Tcp_Defense",
+        "Udp_Traffic_Limiting_Strict",
+        "Udp_Fragment_Rate_Limiting"
+      ],
+      "notes": "Current auto-generator tunes this family from pcap features such as pps, fixed length, fixed payload, source count, and destination-port dispersion.",
+      "changed_entry_count": 7,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Abnormal",
+          "new_enable_status": 1,
+          "threshold": "2000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "2000000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Traffic_Limiting_Strict",
+          "new_enable_status": 1,
+          "threshold": null,
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Fragment_Rate_Limiting",
+          "new_enable_status": 1,
+          "threshold": "50000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_New_Conn_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Session_Behavior_Detect_Packet_Interval",
+          "new_enable_status": 1,
+          "threshold": "0-2",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Correlation",
+          "new_enable_status": 1,
+          "threshold": "null|null|null|null,null|null|null|null",
+          "mode_type": 0
+        }
+      ],
+      "enabled_with_null_threshold": [
+        "Udp_Traffic_Limiting_Strict"
+      ],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/udp_flood.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "UDP_REFLECTION",
+      "protocol": "udp",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Udp_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Zone_Traffic_Limiting",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "optional_entries": [
+        "Udp_Correlation",
+        "Udp_Abnormal"
+      ],
+      "notes": "If the reflected protocol is known, prefer protocol-specific entries such as DNS or SIP over pure generic UDP controls.",
+      "changed_entry_count": 4,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "2000000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_Fragment_Rate_Limiting",
+          "new_enable_status": 1,
+          "threshold": "50000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Udp_New_Conn_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Statistics_Based_On_Destination_Ip",
+          "new_enable_status": 1,
+          "threshold": "50000",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/udp_reflection.switch_template.incremental.json"
+    },
+    {
+      "normalized_attack_type": "UNKNOWN_DDOS",
+      "protocol": "ip",
+      "automation_ready": false,
+      "enabled_entries": [
+        "Zone_Traffic_Limiting",
+        "Traffic_Limiting_For_Single_Ip",
+        "Other_Traffic_Limiting"
+      ],
+      "optional_entries": [
+        "Other_New_Conn_Limiting",
+        "Zone_Filter_Drop_Rate"
+      ],
+      "notes": "Fallback family for manual review when the classified type does not align cleanly with the template entries.",
+      "changed_entry_count": 2,
+      "changes": [
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Other_Traffic_Limiting",
+          "new_enable_status": 1,
+          "threshold": "500000",
+          "mode_type": null
+        },
+        {
+          "deviceIp": "10.99.80.104",
+          "attack_type": "Other_New_Conn_Limiting",
+          "new_enable_status": 1,
+          "threshold": "100000",
+          "mode_type": null
+        }
+      ],
+      "enabled_with_null_threshold": [],
+      "missing_entries": [],
+      "output_json": "华为antiddos1908/模板/switch_templates_incremental/unknown_ddos.switch_template.incremental.json"
+    }
+  ]
+}

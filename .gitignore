@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+logs/*.log
+workdir/
+
+*.pcap
+*.pcapng
+.env
+.venv/
+dist/
+build/

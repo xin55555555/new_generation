@@ -1,0 +1,11 @@
+{
+  "template_mode": "incremental_patch",
+  "comparison_baseline": "config/policy_t.json",
+  "normalized_attack_type": "SIP_APP",
+  "policyDetailDto": [],
+  "strict_profile_source": {
+    "xlsx": "config/ATIC策略配置基线20260602.xlsx",
+    "sheet": "ATIC策略配置-R25.0",
+    "column": "严格-Strict"
+  }
+}
