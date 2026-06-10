@@ -7,20 +7,35 @@ import requests
 from src.configs.index import CONTROL_CENTER_TIMEOUT, CONTROL_CENTER_URL
 
 
-def dispatch_selected_templates(result: dict[str, Any]) -> dict[str, Any]:
+def load_selected_payloads(result: dict[str, Any]) -> list[dict[str, Any]]:
+    payloads = []
+    for value in result.get("incrementalJsonPaths") or []:
+        template_path = Path(value).resolve()
+        payloads.append(
+            {
+                "templatePath": str(template_path),
+                "payload": json.loads(template_path.read_text(encoding="utf-8")),
+            }
+        )
+    return payloads
+
+
+def dispatch_selected_templates(
+    result: dict[str, Any], selected_payloads: list[dict[str, Any]] | None = None
+) -> dict[str, Any]:
     """Post each selected incremental JSON in the format expected by control-center-system."""
-    paths = result.get("incrementalJsonPaths") or []
+    selected_payloads = selected_payloads if selected_payloads is not None else load_selected_payloads(result)
     target = f"{CONTROL_CENTER_URL}/api/defenseConfig/update"
-    if not paths:
+    if not selected_payloads:
         return {"status": "skipped", "target": target, "reason": "no incremental template generated", "items": []}
 
     session = requests.Session()
     session.trust_env = False
     items = []
     try:
-        for value in paths:
-            template_path = Path(value).resolve()
-            payload = json.loads(template_path.read_text(encoding="utf-8"))
+        for selected in selected_payloads:
+            template_path = Path(selected["templatePath"])
+            payload = selected["payload"]
             response = session.post(target, json=payload, timeout=CONTROL_CENTER_TIMEOUT)
             response.raise_for_status()
             try:
