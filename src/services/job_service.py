@@ -47,6 +47,31 @@ def get_job(job_id: str) -> dict[str, Any] | None:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _load_identified_attacks(jobs_path: str | None) -> list[dict[str, Any]]:
+    if not jobs_path:
+        return []
+    path = Path(jobs_path)
+    if not path.is_file():
+        return []
+
+    attacks = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        item = json.loads(line)
+        attacks.append(
+            {
+                "attackType": item.get("attack_type"),
+                "victimIp": item.get("victim_ip"),
+                "protocol": item.get("protocol"),
+                "severity": item.get("severity"),
+                "confidence": item.get("confidence"),
+                "sourcePcap": item.get("source_pcap"),
+            }
+        )
+    return attacks
+
+
 def submit_pcap_job(payload: dict[str, Any]) -> dict[str, Any]:
     pcap_path = resolve_pcap(payload["pcapDir"], payload["pcapName"])
     submitted_at = _now()
@@ -73,14 +98,21 @@ def _run_job(job_id: str, pcap_path: Path, payload: dict[str, Any]) -> None:
 
     try:
         result = generate(pcap_path, payload)
+        identified_attacks = _load_identified_attacks(result.get("jobsPath"))
+        result["identifiedAttacks"] = identified_attacks
         job.update(
             {
                 "pipelineStatus": result.get("status"),
+                "identifiedAttacks": identified_attacks,
                 "resultJsonPath": result.get("resultJsonPath"),
                 "incrementalJsonPaths": result.get("incrementalJsonPaths", []),
                 "selectedTemplateCount": result.get("selectedTemplateCount", 0),
                 "unsupportedJobCount": result.get("unsupportedJobCount", 0),
             }
+        )
+        log(
+            "【步骤 4/5 完成】攻击识别完成",
+            fmt_json({"jobId": job_id, "identifiedAttacks": identified_attacks}),
         )
 
         try:
