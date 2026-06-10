@@ -74,33 +74,9 @@
           "clear_former_exclude_ports": null,
           "port_range": [],
           "domain_list": []
-        },
-        {
-          "attack_type": "Syn_Flood_Abnormal_Src_Block",
-          "enable_status": 1,
-          "threshold": "60,10,2,2,10",
-          "mode_type": null,
-          "udp_limit_port_range": [],
-          "udp_corr_prev_dst_port": [],
-          "udp_corr_prev_packet_length": [],
-          "udp_corr_prev_payload": [],
-          "udp_corr_follow_dst_port": [],
-          "udp_corr_follow_packet_length": [],
-          "udp_corr_follow_payload": [],
-          "http_uri": [],
-          "clear_former_uri": null,
-          "captcha_caption": null,
-          "proxy_keyword": null,
-          "tcp_flag": [],
-          "clear_former_tcp_flag": null,
-          "exclude_ports": [],
-          "clear_former_exclude_ports": null,
-          "port_range": [],
-          "domain_list": []
         }
       ]
     }
   ],
   "strategy_source": "config/policy_syn.json"
 }
- 
